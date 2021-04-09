@@ -1,5 +1,5 @@
 Moblabgui
 ====================================
 
-.. automodule:: moblabpy.moblabgui
+.. automodule:: moblabgui
    :members:
