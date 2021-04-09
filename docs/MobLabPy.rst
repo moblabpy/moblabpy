@@ -1,7 +1,7 @@
 MobLabPy
 ---------------------
 
-.. automodule:: moblabpy
+.. automodapi:: moblabpy
     :members:
     :undoc-members:
     :show-inheritance:
