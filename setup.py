@@ -2,10 +2,10 @@ from distutils.core import setup
 setup(
   name = 'moblabpy',
   packages = ['moblabpy'],
-  version = '0.1',
+  version = '0.1.0',
   license='MIT',
   description = 'A module that allow users to stimluate communcation system via their own device',
-  author = 'Lewis Chan Chun Ming, Lawrence Tse Pui Yu',
+  author = 'Moblabpy Official',
   author_email = 'moblabpy@gmail.com',
   url = 'https://github.com/moblabpy/moblabpy',
   download_url = 'https://github.com/moblabpy/moblabpy/archive/refs/tags/v_01.tar.gz',
