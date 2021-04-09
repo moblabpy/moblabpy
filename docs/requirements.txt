@@ -1,5 +1,5 @@
 numpy
 segno
 pyzbar
-PIL
-cv2
+Pillow
+opencv-python
