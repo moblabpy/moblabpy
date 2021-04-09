@@ -2,4 +2,6 @@ Moblabgui
 ====================================
 
 .. automodule:: moblabgui
-   :members:
+    :members:
+    :undoc-members:
+    :show-inheritance:
