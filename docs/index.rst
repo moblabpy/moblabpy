@@ -10,8 +10,7 @@ Welcome to moblabpy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   Moblabpy
-   Moblabgui
+   _autogen/moblabpy*
 
 Indices and tables
 ==================
