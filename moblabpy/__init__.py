@@ -1,2 +1,2 @@
-from moblabpy.moblabpy import PROPS, MobLabPy
-from moblabpy.moblabgui import monitor, VidCap, player, 
+from moblabpy import PROPS, MobLabPy
+from moblabgui import monitor, VidCap, player, 
