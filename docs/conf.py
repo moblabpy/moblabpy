@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'moblabpy'
-copyright = '2021, ChunMing Chan, PuiYu Tse'
-author = 'ChunMing Chan, PuiYu Tse'
+copyright = '2021, Moblabpy Official'
+author = 'Moblabpy Official'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
