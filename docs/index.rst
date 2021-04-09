@@ -19,3 +19,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+* Source code: https://github.com/moblabpy/moblabpy
