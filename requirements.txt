@@ -1,2 +1,2 @@
-moblabpy/moblabpy
-moblabpy.moblabgui
+moblabpy/moblabpy.py
+moblabpy.moblabgui.py
