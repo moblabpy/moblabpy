@@ -1,7 +1,7 @@
 MobLabGUI
 ---------------------
 
-.. automodule:: moblabgui
+.. automodapi:: moblabgui
     :members:
     :undoc-members:
     :show-inheritance:
