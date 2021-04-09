@@ -1,5 +1,5 @@
 Moblabpy
 ====================================
 
-.. automodule:: moblabpy.moblabpy
+.. automodule:: moblabpy
    :members:
