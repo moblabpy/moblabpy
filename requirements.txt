@@ -1,6 +1,6 @@
 numpy
 segno
-libzbar0
+zbar
 pyzbar
 Pillow
 opencv-python
