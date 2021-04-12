@@ -1,1 +1,5 @@
-moblabpy
+numpy
+segno
+pyzbar
+Pillow
+opencv-python
