@@ -1,6 +1,1 @@
-numpy
-segno
-zbar
-pyzbar
-Pillow
-opencv-python
+moblabpy
