@@ -12,10 +12,10 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../../moblabpy'))
 
-import moblabpy.moblabpy
-import moblabpy.moblabgui
+import moblabpy
+import moblabgui
 
 # -- Project information -----------------------------------------------------
 
