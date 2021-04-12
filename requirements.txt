@@ -2,3 +2,4 @@ numpy
 segno
 Pillow
 opencv-python
+pyzbar
