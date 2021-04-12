@@ -1,2 +1,2 @@
-from moblabpy.molabpy import *
-from moblabpy.moblabgui import *
+from molabpy import *
+from moblabgui import *
