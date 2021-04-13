@@ -5,8 +5,10 @@ Welcome to moblabpy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   Moblabpy
-   Moblabgui
+
+   pages/intro
+   pages/install
+   pages/api
 
 Indices and tables
 ==================
