@@ -119,6 +119,7 @@ class monitor:
     def get_button_status(self):
         '''
         Return the status of the button.
+        
         :return: the status of the button, whether it has been pressed
         :rtype: bool
         '''
@@ -134,6 +135,7 @@ class VidCap:
     def __init__(self, scale, vidsource=0):
         '''
         Defines the video to be played and its porperty.
+
         :param scale: the scale of which the video is being played. The higher the number, the bigger the video
         :type scale: integer
         :param vidsource: the file path of the video
@@ -148,6 +150,7 @@ class VidCap:
     def get_fps(self):
         '''
         Return the fps of the video.
+
         :return: the fps of the video
         :rtype: integer
         '''
@@ -156,6 +159,7 @@ class VidCap:
     def get_height(self):
         '''
         Return the height of the video.
+
         :return: the height of the video
         :rtype: integer
         '''
@@ -164,6 +168,7 @@ class VidCap:
     def get_width(self):
         '''
         Return the width of the video.
+
         :return: the width of the video
         :rtype: integer
         '''
@@ -172,7 +177,8 @@ class VidCap:
     def get_frame(self):
         '''
         Get one frame from the video.
-        :returns ret, frame: whether a frame is successfully grabbed; the image from the video, None if there is nothing
+
+        :returns ret, frame: whether a frame is successfully grabbed; the image from the video, None otherwise.
         :rtype: bool, image
         '''
         if self.vid.isOpened():
@@ -202,6 +208,7 @@ class player:
     def __init__(self, master, scale, vidsource=0):
         '''
         Defines the video player window.
+
         :param master: root window
         :type master: Tk
         :param scale: the scale of which the video is being played. The higher the number, the bigger the video
