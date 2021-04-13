@@ -4,7 +4,7 @@ import numpy as np
 import os
 import segno
 import tempfile
-import moblabpy.moblabgui as mgui
+import moblabgui as mgui
 import tkinter as tk
 from ctypes import c_bool, c_char, c_wchar_p, c_int
 from cv2 import cv2
