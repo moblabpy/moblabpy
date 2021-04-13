@@ -4,7 +4,7 @@ import numpy as np
 import os
 import segno
 import tempfile
-import moblabgui as mgui
+import moblabpy.moblabgui as mgui
 import tkinter as tk
 from ctypes import c_bool, c_char, c_wchar_p, c_int
 from cv2 import cv2
@@ -435,7 +435,7 @@ def generate_res():
         pass
     # generate finder patterns
     for i in range(4):
-        finder_pattern = segno.make(f"{i}", micro=False, error="H")
+        finder_pattern = segno.make(f"{i + 1}", micro=False, error="H")
         finder_pattern.save(f"./res/finderPattern{i + 1}.png", border = 2, scale = 4)
     # generate start and end signal
     pilot_bit = segno.make("0", micro=False, error="H")
