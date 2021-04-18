@@ -51,7 +51,7 @@ class MobLabPy:
     def __init__(self, ip_address, bit_mess, props = PROPS):
         self.__sender, self.__recver = multiprocessing.Pipe()
         self.ip_adress = ip_address
-        self.bit_mess = bit_mess
+        self.bit_mess = "".join([str(bit) for bit in bit_mess])
         self.vid_source = props.VID_SOURCE
         self.is__pilot_bit_found = multiprocessing.Value(c_bool, False)
         self.is__button_pressed = multiprocessing.Value(c_bool, False)
