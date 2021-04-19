@@ -13,6 +13,7 @@ class monitor:
     def __init__(self, master, bit_mess):
         '''
         Defines the monitor window.
+
         :param master: root window
         :type master: Tk
         :param bit_mess: the bit sequence to be sent
@@ -89,8 +90,10 @@ class monitor:
     def update_recv(self, bit_seq):
         '''
         Update the received and error bits textbox upon call.
+
         :param bit_seq: the bits that are collected from the receiver
         :type master: string
+
         '''
         self.received_bits.config(state = 'normal')
         self.received_bits.insert('insert', bit_seq) # Print bit_seq in received_bits
@@ -132,6 +135,7 @@ class VidCap:
     def __init__(self, scale, vidsource=0):
         '''
         Defines the video to be played and its porperty.
+
         :param scale: the scale of which the video is being played. The higher the number, the bigger the video
         :type scale: integer
         :param vidsource: the file path of the video
@@ -146,6 +150,7 @@ class VidCap:
     def get_fps(self):
         '''
         Return the fps of the video.
+
         :return: the fps of the video
         :rtype: integer
         '''
@@ -154,6 +159,7 @@ class VidCap:
     def get_height(self):
         '''
         Return the height of the video.
+
         :return: the height of the video
         :rtype: integer
         '''
@@ -162,6 +168,7 @@ class VidCap:
     def get_width(self):
         '''
         Return the width of the video.
+
         :return: the width of the video
         :rtype: integer
         '''
@@ -170,6 +177,7 @@ class VidCap:
     def get_frame(self):
         '''
         Get one frame from the video.
+
         :returns ret, frame: whether a frame is successfully grabbed; the image from the video, None otherwise.
         :rtype: bool, image
         '''
@@ -200,6 +208,7 @@ class player:
     def __init__(self, master, scale, vidsource=0):
         '''
         Defines the video player window.
+
         :param master: root window
         :type master: Tk
         :param scale: the scale of which the video is being played. The higher the number, the bigger the video
@@ -235,6 +244,7 @@ class player:
         Update the video canvas to display the next frame.
         '''
         start = time() # Record start time
+        ret = False
         for i in range(int(self.vid.get_fps())):
             ret, frame = self.vid.get_frame()
         if ret:

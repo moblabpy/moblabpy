@@ -3,8 +3,9 @@ import multiprocessing
 import numpy as np
 import os
 import segno
+import sys
 import tempfile
-from moblabpy import moblabgui as mgui
+import moblabpy.moblabgui as mgui
 import tkinter as tk
 from ctypes import c_bool, c_char, c_wchar_p, c_int
 from cv2 import cv2
@@ -28,6 +29,7 @@ class PROPS():
     def set_BPS(bps):
         '''
         Set the bps property of the video and other related properties. 
+
         :param bps: the bps want to set. It must be able to be perfect squared, such as 16, 25, 36...
         :type bps: integer
         '''
@@ -39,6 +41,7 @@ class PROPS():
 class MobLabPy:
     '''
     A moblabpy object allows users to connect their ip camera with the program to simulate a telecommunication system.
+
     :param ip_address: the ip address of the IP camera
     :type ip_address: string
     :param bit_mess: the transmitted bit sequence
@@ -49,7 +52,7 @@ class MobLabPy:
     def __init__(self, ip_address, bit_mess, props = PROPS):
         self.__sender, self.__recver = multiprocessing.Pipe()
         self.ip_adress = ip_address
-        self.bit_mess = "".join([str(bit) for bit in bit_mess])
+        self.bit_mess = "".join(map(str, bit_mess))
         self.vid_source = props.VID_SOURCE
         self.is__pilot_bit_found = multiprocessing.Value(c_bool, False)
         self.is__button_pressed = multiprocessing.Value(c_bool, False)
@@ -68,11 +71,11 @@ class MobLabPy:
         recv_frame(self.__fps, self.is__pilot_bit_found, self.__recver, self.__bit_seq, self.is__button_pressed, self.bit_mess)
 
         self.__sender_func.join()
-        self.__vid_player.join()
     
     def get_bit_seq(self):
         '''
         Return the bit sequence of the MobLabPy class.
+
         :returns bit_seq: the received bit sequence
         :rtype: list
         '''
@@ -83,6 +86,7 @@ class MobLabPy:
 def img_to_bit_seq(frame, pt1 = (), pt2 = (), props = PROPS):
     '''
     Convert black and white color to "0" and "1" respectively.
+
     :param frame: Image.
     :type frame: ndarray
     :param pt1: vertex of the area bounded by qr codes.
@@ -100,7 +104,7 @@ def img_to_bit_seq(frame, pt1 = (), pt2 = (), props = PROPS):
     _, pt1, pt2 = find_corner(grey_scale)
     try:
         crop_img = grey_scale[pt1[1]-10:pt2[1]+10, pt1[0]-10:pt2[0]+10]
-        color_img = cv2.cvtColor(crop_img, cv2.COLOR_GRAY2BGR)
+        # color_img = cv2.cvtColor(crop_img, cv2.COLOR_GRAY2BGR)
         ### decode color bits one by one
         height, width = crop_img.shape
         th = 120
@@ -110,7 +114,7 @@ def img_to_bit_seq(frame, pt1 = (), pt2 = (), props = PROPS):
             for j in range(props.COL):
                 ### decode color bits
                 info_bits_area = crop_img[offset + info_bit_size * i:offset + info_bit_size * (i + 1), offset + info_bit_size * j:offset + info_bit_size * (j + 1)]
-                cv2.rectangle(color_img, (offset + info_bit_size * j, offset + info_bit_size * i), (offset + info_bit_size * (j + 1), offset + info_bit_size * (i + 1)), (0, 255, 0), 1)
+                # cv2.rectangle(color_img, (offset + info_bit_size * j, offset + info_bit_size * i), (offset + info_bit_size * (j + 1), offset + info_bit_size * (i + 1)), (0, 255, 0), 1)
                 _, th1 = cv2.threshold(info_bits_area, th, 255, cv2.THRESH_BINARY)
                 try:
                     if np.mean(th1) >= th:
@@ -119,7 +123,7 @@ def img_to_bit_seq(frame, pt1 = (), pt2 = (), props = PROPS):
                         bit_seq += "0"
                 except TypeError:
                         bit_seq += "0"
-        # cv2.imwrite(f"./detection/0.png", color_img)
+        # cv2.imwrite(f"./detection/{bit_seq}.png", color_img)
         # bit_arr = np.array(list(bit_seq))
         return bit_seq, pt1, pt2
     except IndexError:
@@ -129,6 +133,7 @@ def img_to_bit_seq(frame, pt1 = (), pt2 = (), props = PROPS):
 def check_orientation(frame, pt1, pt2):
     '''
     Check the orientation of the image according to the qr codes in the corner.
+
     :param frame: image
     :type frame: ndarray
     :param pt1: vertex of the area bounded by qr codes.
@@ -176,6 +181,7 @@ def check_orientation(frame, pt1, pt2):
 def point_rotation(pt1, pt2, width, rotation):
     '''
     Perform the rotation of vertices of the color matrix area.
+
     :param pt1: vertex of the color matrix
     :type pt1: tuple
     :param pt2: vertex of the color matrix opposite to pt1
@@ -199,6 +205,7 @@ def point_rotation(pt1, pt2, width, rotation):
 def find_corner(frame, pt1 = (), pt2 = ()):
     '''
     Find the vertex of the color matrix surrounded by but exclude qr codes.
+
     :param frame: image
     :type frame: ndarray
     :param pt1: vertex of the area include qr codes
@@ -224,6 +231,7 @@ def find_corner(frame, pt1 = (), pt2 = ()):
 def find_min_and_max(points, min_pt, max_pt):
     '''
     Find the minimum and maximum xy-points in a list and the provides points.
+
     :param points: a list of points
     :type points: list
     :param min_pt: the minimum points provided
@@ -234,7 +242,7 @@ def find_min_and_max(points, min_pt, max_pt):
     :rtype: tuple, tuple
     '''
     min_pt = np.array(min_pt)
-    max_pt = np.array(points[0])
+    max_pt = np.array(max_pt)
 
     for point in points:
         if min_pt[0] > point[0]:
@@ -250,6 +258,7 @@ def find_min_and_max(points, min_pt, max_pt):
 def all_zeros_or_ones(bit_seq):
     '''
     Check if the bit sequence contains only 0 or 1.
+
     :param bit_seq: the bit sequence needed to be checked
     :type bit_seq: string
     :return: "True" if the bit sequence only contains 0 or 1, "False" otherwise
@@ -271,6 +280,7 @@ def all_zeros_or_ones(bit_seq):
 def str_to_ascii_seq(my_str = "Apple"):
     '''
     Convert each character in a string to its corresponding ascii code.
+
     :param my_str: the string wanted to be converted
     :type my_str: string, defaults to Apple
     :return ascii_arr: a list of integer that contains all the ascii code of each character in my_str
@@ -288,6 +298,7 @@ def str_to_ascii_seq(my_str = "Apple"):
 def ascii_seq_to_bit_seq(ascii_arr):
     '''
     Convert a list of ascii code to its binary representation.
+
     :param ascii_arr: a list that contains ascii code
     :type ascii_arr: list
     :return bit_arr: an integer binary list
@@ -304,6 +315,7 @@ def ascii_seq_to_bit_seq(ascii_arr):
 def bit_seq_to_ascii_seq(bit_arr):
     '''
     Perform byte conversion of an array.
+
     :param bit_arr: an integer binary array
     :type bit_arr: list
     :return ascii_arr: a list contains all the corresponding ascii code
@@ -327,6 +339,7 @@ def bit_seq_to_ascii_seq(bit_arr):
 def ascii_seq_to_str(ascii_arr):
     '''
     Convert a list of ascii code to its corresponding character.
+
     :param ascii_arr: a list that contains ascii code
     :type ascii_arr: list
     :return my_str: the character format of the ascii list
@@ -337,25 +350,22 @@ def ascii_seq_to_str(ascii_arr):
         my_str += chr(ascii_code)
     return my_str
 
-def append_zeros(bit_seq, props = PROPS, is_str = False):
+def append_zeros(bit_seq, props = PROPS):
     '''
     Append zeros until the length of the input equals to the products of desired length.
+
     :param bit_seq: integer binary array
     :type bit_seq: list
     :param props: the PROPS object that contains the properties of the program.
     :type props: :class:`PROPS`
-    :param is_str: `True` if the bit sequence is type :class:`string`, `False` otherwise
-    :type is_str: bool, defaults to False
     :return bit_arr: an integer binary array which length is the product of the second parameter
-    :rtype: list
+    :rtype: list(int)
     '''  
     remain = props.BPS - len(bit_seq) % props.BPS
     bit_seq = "".join(map(str, bit_seq))
     if len(bit_seq) % props.BPS != 0:
         for _ in range(remain):
             bit_seq += "0"
-    if is_str:
-        return bit_seq
     bit_arr = np.array(list(bit_seq), dtype = int)
     return bit_arr
 
@@ -364,6 +374,7 @@ def generate_img(dir_name, my_str = "Hello World", if_bin = False, props = PROPS
     Generate images that contain color matrix of my_str parameter, with black represents 0 and white represents 1, and
     paste them with the qr codes (finder patterns) together. The generated images will be saved at the dir_name 
     directory.
+
     :param dir_name: the directory name used to save the image generated
     :type dir_name: string
     :param my_str: the integer binary array which will be convert to color code formats
@@ -408,7 +419,6 @@ def generate_img(dir_name, my_str = "Hello World", if_bin = False, props = PROPS
                 info_bits_area[props.INFO_BIT_SIZE * j: props.INFO_BIT_SIZE * (j + 1), props.INFO_BIT_SIZE * k:props.INFO_BIT_SIZE * (k + 1), :] = info_bit
         img[height // 4: height * 3 // 4, width // 4: width * 3 // 4, :] = info_bits_area
         cv2.imwrite(f"{dir_name}/{i}.png", img)
-        # cv2.imwrite(f"./12bps/36bps{i}.png", img)
 
 def generate_res():
     '''
@@ -449,6 +459,7 @@ def generate_video(video_name = f"{PROPS.BPS}bps.mp4", mystr = "Hello World", if
     '''
     Generate a video which contains start and end messages, start and end signals, finder patterns and color matrix
     of the mystr parameter, with desired fps.
+
     :param video_name: The name of the generated video in mp4 format
     :type video_name: string
     :param mystr: the message that will be converted to color code
@@ -461,6 +472,7 @@ def generate_video(video_name = f"{PROPS.BPS}bps.mp4", mystr = "Hello World", if
     if (video_name.find(".mp4") == -1):
         video_name = "video.mp4"
 
+    generate_res()
     props.VID_SOURCE = video_name
     width = height = 400
     size = (width, height)
@@ -517,6 +529,7 @@ def recv_frame(fps, is_pilot_bit_found , recver, bit_seq, flag, bit_mess, props 
     '''
     Funtion that received frames from the sender function. It does all the manipulation of the captured iamge
     here, such as detecting start and end signals, checking rotations and decoding color codes back to 0 and 1.
+
     :param fps: a :class:`multiprocessing.sharedctypes.Synchronized` object which represents the fps of the camera
     :type fps: :class:`multiprocessing.sharedctypes.Synchronized`
     :param is_pilot_bit_found: a :class:`multiprocessing.sharedctypes.Synchronized` object which is `True` if the start signal is detected, `False` otherwise
@@ -567,6 +580,7 @@ def recv_frame(fps, is_pilot_bit_found , recver, bit_seq, flag, bit_mess, props 
                 _, width, _ = frame.shape
                 pt1, pt2 = point_rotation(pt1, pt2, width, rotation_time)
                 frame = np.rot90(frame, rotation_time)
+                # cv2.imwrite(f"./frame/{frame_count}.png", frame)
                 decoded_bit_seq, pt1, pt2 = img_to_bit_seq(frame, pt1, pt2)
                 if all_zeros_or_ones(decoded_bit_seq):
                     is_pilot_bit_found.value = False
@@ -580,8 +594,8 @@ def recv_frame(fps, is_pilot_bit_found , recver, bit_seq, flag, bit_mess, props 
         frame_count += 1
         idx_info_bit += 1
 
-    ascii_seq = bit_seq_to_ascii_seq(bit_seq.value)
-    my_str = ascii_seq_to_str(ascii_seq)
+    # ascii_seq = bit_seq_to_ascii_seq(bit_seq.value)
+    # my_str = ascii_seq_to_str(ascii_seq)
     # print(f"bit_seq: {bit_seq.value}")
     # print(f"ascii_seq: {ascii_seq}")
     # print(f"my_str: {my_str}")
@@ -590,6 +604,7 @@ def recv_frame(fps, is_pilot_bit_found , recver, bit_seq, flag, bit_mess, props 
 def vid_player(vid_source, flag, props = PROPS):
     '''
     A video player will be appeared if the play video button is clicked
+
     :param vid_source: the name of the video to pe played
     :type vid_source: string
     :param flag: a :class:`multiprocessing.sharedctypes.Synchronized` object which is the state of the play video button
@@ -607,6 +622,7 @@ def vid_player(vid_source, flag, props = PROPS):
 def send_frame(fps, is_pilot_bit_found, sender, ip_address, props = PROPS):
     '''
     A sender function which gets images from the connected camera and send it to the receiver function.
+
     :param fps: a :class:`multiprocessing.sharedctypes.Synchronized` object which represents the fps of the camera
     :type fps: :class:`multiprocessing.sharedctypes.Synchronized`
     :param is_pilot_bit_found: a :class:`multiprocessing.sharedctypes.Synchronized` object which is `True` if the start signal is detected, `False` otherwise
@@ -651,7 +667,7 @@ def send_frame(fps, is_pilot_bit_found, sender, ip_address, props = PROPS):
             sender.send(frame)
         except BrokenPipeError:
             break
-        cv2.imwrite(f"./recordFrame/{count}.png", frame)
+        # cv2.imwrite(f"./recordFrame/{count}.png", frame)
         count += 1
 
     print("\nTransmission finished")
@@ -660,6 +676,7 @@ def send_frame(fps, is_pilot_bit_found, sender, ip_address, props = PROPS):
 def encode(D, G):
     '''
     Perform matrix multiplication on parameter D and G, which is D x G.
+
     :param D: a 1 x k matrix
     :type D: list
     :param G: a generator matrix
@@ -685,6 +702,7 @@ def encode(D, G):
 def syndrome(R, H):
     '''
     Calculate the syndrome of the received bit sequence.
+
     :param R: a 1 x n matrix
     :type R: list
     :param H: a parity check matrix
@@ -705,17 +723,14 @@ def syndrome(R, H):
 if __name__ == "__main__":
     # message = "University of Science and Technology"
     # ascii_seq = str_to_ascii_seq(message)
-    # print(f"ascii_seq: {ascii_seq}")
     # bit_seq = ascii_seq_to_bit_seq(ascii_seq)
-    # print(f"bit_seq: {bit_seq}")
-    # PROPS.BPS = 36
-    # bit_mess = append_zeros([0, 1, 0, 0, 1], PROPS)
-    # print(f"bit_mess: {bit_mess}")
-
-    print(syndrome([1,0,0,0,1,1], [[0,1,1,1,0,0],[1,0,1,0,1,0],[1,1,0,0,0,1]]))
-
-    # generate_video(mystr = bit_mess, if_bin = True)
-    # cam = MobLabPy(IP_ADDRESS, bit_mess)
-    # MobLabPy.start(cam)
-    # generate_res()
+    # bit_mess = append_zeros(bit_seq, PROPS)
+    # # generate_video(mystr=bit_mess, if_bin=True)
+    # cam = MobLabPy("http://192.168.3.24:8081", bit_mess)
+    # cam.start()
+    # recv_bit_seq = cam.get_bit_seq()
+    # recv_ascii_seq = bit_seq_to_ascii_seq(recv_bit_seq)
+    # recv_message = ascii_seq_to_str(recv_ascii_seq)
+    # print(recv_message)
+    print(sys.path)
     pass
