@@ -85,7 +85,7 @@ Moblabpy Documentation
         :param ip_address: The ip address of the IP camera
         :type ip_address: str
         :param bit_mess: The transmitted bit sequence
-        :type bit_mess: list
+        :type bit_mess: str
         :param props: A :py:class:`PROPS` class
 
     .. py:function:: start(self)
@@ -224,8 +224,6 @@ Moblabpy Documentation
     :type bit_seq: list(int)
     :param props: :py:class:`PROPS` object that contains the configurations of the program.
     :type props: :py:class:`PROPS`
-    :param is_str: `True` if the bit sequence is type py:class:`str`, `False` otherwise, defaults to `False`
-    :type is_str: bool
     :return bit_arr: An integer binary array which length is the product of the second parameter
     :rtype: list(int)
 
