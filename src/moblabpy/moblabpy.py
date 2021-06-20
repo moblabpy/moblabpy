@@ -409,9 +409,9 @@ def generate_img(dir_name, my_str = "Hello World", if_bin = False, props = PROPS
             finder_pattern_list.append(finder_pattern)
         size = finder_pattern_list[0].shape[0]
         img[0:size, 0:size, :] = finder_pattern_list[0]
-        img[height - size:height, 0:size, :] = finder_pattern_list[1]
-        img[height - size:height, height - size:height, :] = finder_pattern_list[2]
-        img[0:size, width - size:width, :] = finder_pattern_list[3]
+        img[width - size:width, 0:size, :] = finder_pattern_list[1]
+        img[width - size:width, height - size:height, :] = finder_pattern_list[2]
+        img[0:size, height - size:height, :] = finder_pattern_list[3]
         for j in range(props.ROW):
             for k in range(props.COL):
                 info_bit = np.ones([props.INFO_BIT_SIZE, props.INFO_BIT_SIZE, 3], dtype=int) * int(bit_seq[i * props.BPS + props.ROW * j + k]) * 255
